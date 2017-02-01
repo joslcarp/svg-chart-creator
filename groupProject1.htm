@@ -1,0 +1,22 @@
+<html>
+<body>
+    <form action="work.php" method="post">
+        Title:<br>
+        <input type="text" name="chartTitle"><br>
+        Chart Type:
+        <select name:"chartType">
+            <option value="Stat">Stat</option>
+            <option value="Bar">Bar</option>
+        </select><br>
+        Sort by:
+            <select name:"sortType">
+            <option value="none">None</option>
+            <option value="grade">Grade</option>
+            <option value="fName">First Name</option>
+            <option value="lName">Last Name</option>
+        </select><br>
+        Data:<textarea name="data" rows="10" cols"30"></textarea>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
