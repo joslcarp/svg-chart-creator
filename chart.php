@@ -114,6 +114,22 @@
       }
       echo "</table>";
     }
+    elseif($sortBy == "score"){
+      arsort($sortedData);
+      echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th></tr>";
+      foreach ($sortedData as $key => $value) {
+        echo "<tr><td>$key</td><td>$value</td></tr>";
+      }
+      echo "</table>";
+    }
+    elseif($sortBy == "name"){
+      ksort($sortedData);
+      echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th></tr>";
+      foreach ($sortedData as $key => $value) {
+        echo "<tr><td>$key</td><td>$value</td></tr>";
+      }
+      echo "</table>";
+    }
 
 
 
