@@ -28,8 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
     $chartData = test_input($_POST["chartData"]);
   }
-
 }
+
 
 function test_input($data) {
   $data = trim($data);
@@ -38,6 +38,12 @@ function test_input($data) {
   return $data;
 }
 
+function multiexplode ($delimiters,$string) {
+
+    $ready = str_replace($delimiters, $delimiters[0], $string);
+    $launch = explode($delimiters[0], $ready);
+    return  $launch;
+}
 
 ?>
 
@@ -75,8 +81,14 @@ echo $chartType;
 echo "<br>";
 echo $sortBy;
 echo "<br>";
-echo $chartData;
+//echo chartData;
 echo "<br>";
+
+//$dataArray = preg_split('/[,.;\\n]+/', $chartData);
+
+$dataArray = multiexplode(array(",","\n"),$chartData);
+
+print_r($dataArray);
 ?>
 
 </body>
