@@ -43,8 +43,9 @@
     $lines  = explode(PHP_EOL, $chartData);
     foreach ($lines as $line) {
       $line = explode(',', $line);
-      $sortedData[array_shift($line)] = array_shift($line);
+      $sortedData[array_shift($line)] = (int)array_shift($line);
     }
+
     var_dump($sortedData);
     foreach($sortedData as $x => $x_value ) {
       if(intval($x_value) > $maxScore){
@@ -99,15 +100,18 @@
     echo round($avgScore, 2);
     echo "<br>";
     if($sortBy == "none"){
-      echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th></tr>";
+      echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th><th>Chart</th></tr>";
       foreach ($sortedData as $key => $value) {
-        echo "<tr><td>$key</td><td>$value</td></tr>";
+        $astercount = $value/10;
+        echo "<tr><td>$key</td><td>$value</td><td>";
+        echo str_repeat("*", $astercount);
+        echo "</td></tr>";
       }
       echo "</table>";
     }
     elseif($sortBy == "score"){
       arsort($sortedData);
-      echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th></tr>";
+      echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th><th>Chart</th></tr>";
       foreach ($sortedData as $key => $value) {
         echo "<tr><td>$key</td><td>$value</td></tr>";
       }
@@ -115,6 +119,22 @@
     }
     elseif($sortBy == "firstName"){
       ksort($sortedData);
+      echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th><th>Chart</th></tr>";
+      foreach ($sortedData as $key => $value) {
+        echo "<tr><td>$key</td><td>$value</td></tr>";
+      }
+      echo "</table>";
+    }
+    elseif($sortBy == "lastName"){
+
+      function lastNameSort($a, $b) {
+          $aLast = end(explode(' ', $a));
+          $bLast = end(explode(' ', $b));
+
+          return strcasecmp($aLast, $bLast);
+      }
+
+      uksort($sortedData, 'lastNameSort');
       echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th></tr>";
       foreach ($sortedData as $key => $value) {
         echo "<tr><td>$key</td><td>$value</td></tr>";
