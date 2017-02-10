@@ -16,7 +16,7 @@
     <?php
     // define variables and set to empty values
     $chartNameErr = $chartDataErr = "";
-    $chartName = $chartType = $sortBy = $chartData = "";
+    $chartName = $chartType = $sortBy = $chartData = $chartInsert = "";
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       if (empty($_POST["chartName"])) {
         $chartNameErr = "Name is required";
@@ -31,22 +31,25 @@
         $chartData = test_input($_POST["chartData"]);
       }
     }
+
     function test_input($data) {
       $data = trim($data);
       $data = stripslashes($data);
       $data = htmlspecialchars($data);
       return $data;
     }
+
     $maxScore = $avgScore = 0;
     $minScore = 100;
     $sortedData = array();
+
     $lines  = explode(PHP_EOL, $chartData);
     foreach ($lines as $line) {
       $line = explode(',', $line);
       $sortedData[array_shift($line)] = (int)array_shift($line);
     }
 
-    var_dump($sortedData);
+
     foreach($sortedData as $x => $x_value ) {
       if(intval($x_value) > $maxScore){
         $maxScore = intval($x_value);
@@ -59,90 +62,91 @@
     $avgScore = $avgScore / count($sortedData);
     ?>
 
-    <h2>SVG Chart Generator</h2>
-    <p><span class="error">* required field.</span></p>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-      Chart Name: <input type="text" name="chartName" value="<?php echo $chartName;?>">
-      <span class="error">* <?php echo $chartNameErr;?></span>
-      <br><br>
-      Chart Type: <select name="chartType" value="<?php echo $chartType;?>">
-        <option value="stats">Stats</option>
-        <option value="bar">Bar</option>
-        <option value="line">Line</option>
-        <option value="pie">Pie</option>
-      </select>
-      <br><br>
-      Sort by: <select name="sortBy" value="<?php echo $sortBy;?>">
-        <option value="none">None</option>
-        <option value="score">Score</option>
-        <option value="firstName">First Name</option>
-        <option value="lastName">Last Name</option>
-      </select>
-      <br><br>
-      Chart Data: <textarea name="chartData" rows="5" cols="40"><?php echo $chartData;?></textarea>
-      <span class="error">* <?php echo $chartDataErr;?></span>
-      <br><br>
-      <input type="submit" name="submit" value="Submit">
+    <h1><center>SVG Chart Generator</center></h1>
+    <div class="container">
+      <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+      <div class="form-group">
+        <label for="chartName2">Chart Name</label>
+          <input type="text" class ="form-control" name="chartName" id="chartName2" value="<?php echo $chartName;?>">
+          <span class="error"><?php echo $chartNameErr;?></span>
+      </div>
+
+      <div class="form-group">
+        <label for="select1">Chart Type:</label>
+        <select class ="form-control" id="select1" name="chartType" value="<?php echo $chartType;?>">
+          <option <?php if (isset($chartType) && $chartType=="stats") echo "selected";?> value="stats">Stats</option>
+          <option <?php if (isset($chartType) && $chartType=="bar") echo "selected";?> value="bar">Bar</option>
+          <option <?php if (isset($chartType) && $chartType=="line") echo "selected";?> value="line">Line</option>
+          <option <?php if (isset($chartType) && $chartType=="pie") echo "selected";?> value="pie">Pie</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="select2">Sort by:</label>
+        <select class="form-control" id="select2" name="sortBy" value="<?php echo $sortBy;?>">
+          <option <?php if (isset($sortBy) && $sortBy=="none") echo "selected";?> value="none">None</option>
+          <option <?php if (isset($sortBy) && $sortBy=="score") echo "selected";?> value="score">Score</option>
+          <option <?php if (isset($sortBy) && $sortBy=="firstName") echo "selected";?> value="firstName">First Name</option>
+          <option <?php if (isset($sortBy) && $sortBy=="lastName") echo "selected";?> value="lastName">Last Name</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="textArea">Chart Data:</label>
+        <textarea class="form-control" id="textArea" rows="4" name="chartData" rows="5" cols="40"><?php echo $chartData;?></textarea>
+        <span class="error"><?php echo $chartDataErr;?></span>
+      </div>
+      <button class="btn btn-primary" type="submit">Submit</button>
     </form>
+  </div>
 
     <?php
-    echo "<h2>Your Input:</h2>";
+    echo "<div class=\"container\"><h1>";
     echo $chartName;
-    echo "<br>";
-    echo $chartType;
-    echo "<br>";
-    echo $sortBy;
-    echo "<br>";
-    echo $maxScore;
-    echo "<br>";
-    echo $minScore;
-    echo "<br>";
-    echo round($avgScore, 2);
-    echo "<br>";
-    if($sortBy == "none"){
-      echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th><th>Chart</th></tr>";
-      foreach ($sortedData as $key => $value) {
-        $astercount = $value/10;
-        echo "<tr><td>$key</td><td>$value</td><td>";
-        echo str_repeat("*", $astercount);
-        echo "</td></tr>";
-      }
-      echo "</table>";
-    }
-    elseif($sortBy == "score"){
+    echo "</h1>";
+
+    if($sortBy == "score"){
       arsort($sortedData);
-      echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th><th>Chart</th></tr>";
-      foreach ($sortedData as $key => $value) {
-        echo "<tr><td>$key</td><td>$value</td></tr>";
-      }
-      echo "</table>";
     }
     elseif($sortBy == "firstName"){
       ksort($sortedData);
-      echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th><th>Chart</th></tr>";
-      foreach ($sortedData as $key => $value) {
-        echo "<tr><td>$key</td><td>$value</td></tr>";
-      }
-      echo "</table>";
     }
     elseif($sortBy == "lastName"){
-
       function lastNameSort($a, $b) {
-          $aLast = end(explode(' ', $a));
-          $bLast = end(explode(' ', $b));
+        $aLast = end(explode(' ', $a));
+        $bLast = end(explode(' ', $b));
 
-          return strcasecmp($aLast, $bLast);
+        return strcasecmp($aLast, $bLast);
       }
-
       uksort($sortedData, 'lastNameSort');
-      echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th></tr>";
-      foreach ($sortedData as $key => $value) {
-        echo "<tr><td>$key</td><td>$value</td></tr>";
-      }
-      echo "</table>";
     }
-    print_r($sortedData);
+
+    echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th><th>Chart</th></tr>";
+    foreach ($sortedData as $key => $value) {
+      echo "<tr><td>$key</td><td>$value</td><td>";
+      if($chartType == "stats"){
+        $astercount = $value/10;
+        echo str_repeat("*", $astercount);
+      }
+      elseif ($chartType == "bar") {
+        echo "<svg width=\"400\" height=\"30\"><rect width=\"";
+        echo $value*4;
+        echo  "\" height=\"30\" style=\"fill:coral;stroke-width:3;stroke:rgb(0,0,0)\" />";
+        echo"</svg>";
+      }
+      echo "</td></tr>";
+    }
+    echo "</table>";
     ?>
+
+    <h4>
+      Max Score: <?php echo $maxScore; ?>
+      <br>
+      Min Score: <?php echo $minScore; ?>
+      <br>
+      Avg Score: <?php echo $avgScore; ?>
+    </h4>
+  </div>
 
   </body>
 </html>
