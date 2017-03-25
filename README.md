@@ -1,4 +1,2 @@
 # SVG Chart Generator
--Generates a chart from a form.
--Bar chart is generated through SVG.
--Line and Pie still need to be completed.
+Generate SVG chart and manipulate data using form.  Data entry format is "first_name last_name, score".  Need to implement pie and line chart types.  
