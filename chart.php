@@ -101,10 +101,6 @@
   </div>
 
     <?php
-    echo "<div class=\"container\"><h1>";
-    echo $chartName;
-    echo "</h1>";
-
     if($sortBy == "score"){
       arsort($sortedData);
     }
@@ -119,24 +115,32 @@
         return strcasecmp($aLast, $bLast);
       }
       uksort($sortedData, 'lastNameSort');
-    }
+    } ?>
 
-    echo "<table class = \"table table-striped\"><tr><th>Name</th><th>Grade</th><th>Chart</th></tr>";
-    foreach ($sortedData as $key => $value) {
-      echo "<tr><td>$key</td><td>$value</td><td>";
-      if($chartType == "stats"){
-        $astercount = $value/10;
-        echo str_repeat("*", $astercount);
-      }
-      elseif ($chartType == "bar") {
-        echo "<svg width=\"400\" height=\"30\"><rect width=\"";
-        echo $value*4;
-        echo  "\" height=\"30\" style=\"fill:coral;stroke-width:3;stroke:rgb(0,0,0)\" />";
-        echo"</svg>";
-      }
-      echo "</td></tr>";
+    <?php
+    echo '<div class="container"><h1>';
+    echo $chartName;
+    echo '</h1>';
+
+    if($chartType == "stats"){
+        echo '<table class="table table-striped"><tr><th>Name</th><th>Grade</th><th>Chart</th></tr>';
+        foreach ($sortedData as $key => $value) {
+            echo '<tr><td>$key</td><td>$value</td><td>';
+            $astercount = $value/10;
+            echo str_repeat("*", $astercount);
+            echo '</td></tr>';
+        }
+        echo '</table>';
     }
-    echo "</table>";
+    elseif ($chartType == "bar") {
+        echo '<table class="table table-striped"><tr><th>Name</th><th>Grade</th><th>Chart</th></tr>';
+        foreach ($sortedData as $key => $value) {
+            echo "<tr><td>$key</td><td>$value</td><td><svg width=\"400\" height=\"30\"><rect width=\"";
+            echo $value * 4;
+            echo '" height="30" style="fill:red;stroke:black;stroke-width:5;opacity:0.5"/></svg></td></tr>';
+        }
+        echo '</table>';
+    }
     ?>
 
     <h4>
